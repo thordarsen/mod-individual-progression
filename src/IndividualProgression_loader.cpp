@@ -23,7 +23,7 @@ void AddSC_boss_razuvious_40();
 void AddSC_boss_sapphiron_40();
 void AddSC_boss_thaddius_40();
 void AddSC_npc_omarion();
-void AddSC_aq_scripts();
+//void AddSC_aq_scripts();
 
 
 void Addmod_individual_progressionScripts()
@@ -48,5 +48,5 @@ void Addmod_individual_progressionScripts()
     AddSC_boss_sapphiron_40();
     AddSC_boss_thaddius_40();
     AddSC_npc_omarion();
-    AddSC_aq_scripts();
+//    AddSC_aq_scripts();
 }
