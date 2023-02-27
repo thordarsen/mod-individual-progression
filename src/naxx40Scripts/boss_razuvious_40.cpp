@@ -137,7 +137,7 @@ public:
             Talk(SAY_AGGRO);
             events.ScheduleEvent(EVENT_UNBALANCING_STRIKE, 20000);
             events.ScheduleEvent(EVENT_DISRUPTING_SHOUT, 15000);
-            events.ScheduleEvent(EVENT_JAGGED_KNIFE, 10000);
+            //events.ScheduleEvent(EVENT_JAGGED_KNIFE, 10000);
             summons.DoZoneInCombat();
         }
 
