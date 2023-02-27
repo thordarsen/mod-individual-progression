@@ -63,6 +63,7 @@ enum ProgressionMaps
     MAP_AQ_20 = 509,
     MAP_AQ_40 = 531,
     MAP_OUTLANDS = 530,
+    MAP_NAXXRAMAS = 533,
     MAP_ZUL_AMAN = 568,
     MAP_NORTHREND = 571,
     MAP_ULDUAR = 603,
@@ -122,6 +123,16 @@ enum ProgressionState : uint8
     PROGRESSION_WOTLK_TIER_3    = 14, // TotC
     PROGRESSION_WOTLK_TIER_4    = 15, // ICC
     PROGRESSION_WOTLK_TIER_5    = 16  // Ruby Sanctum
+};
+
+enum RandomDungeonIds : uint16
+{
+    // Values from LFGDungeons.dbc
+    RDF_CLASSIC = 258,
+    RDF_THE_BURNING_CRUSADE = 259,
+    RDF_THE_BURNING_CRUSADE_HEROIC = 260,
+    RDF_WRATH_OF_THE_LICH_KING = 261,
+    RDF_WRATH_OF_THE_LICH_KING_HEROIC = 262
 };
 
 class IndividualProgression

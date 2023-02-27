@@ -91,9 +91,9 @@ public:
             Talk(SAY_DEATH);
         }
 
-        void EnterCombat(Unit* who) override
+        void JustEngagedWith(Unit* who) override
         {
-            BossAI::EnterCombat(who);
+            BossAI::JustEngagedWith(who);
             Talk(SAY_AGGRO);
             me->SetInCombatWithZone();
             events.ScheduleEvent(EVENT_HATEFUL_STRIKE, 1200);
@@ -157,7 +157,7 @@ public:
                         {
                             me->CastSpell(finalTarget, SPELL_HATEFUL_STRIKE, false);
                         }
-                        events.RepeatEvent(1200);
+                        events.RepeatEvent(2400);
                         break;
                     }
                 case EVENT_BERSERK:
