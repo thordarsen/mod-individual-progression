@@ -179,7 +179,7 @@ public:
                     {
                         me->CastSpell(target, SPELL_MUTATING_INJECTION, false);
                     }
-                    events.RepeatEvent(6000 + uint32(120 * me->GetHealthPct()));
+                    events.RepeatEvent(10000 + uint32(240 * me->GetHealthPct()));
                     break;
             }
             DoMeleeAttackIfReady();

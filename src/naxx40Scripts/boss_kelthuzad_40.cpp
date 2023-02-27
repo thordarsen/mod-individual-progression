@@ -408,14 +408,14 @@ public:
                     events.RepeatEvent(urand(15000, 30000));
                     break;
                 case EVENT_SHADOW_FISSURE:
-                    if (Unit* target = SelectTarget(SelectTargetMethod::Random, 0, 100.0f, true))
+                    if (Unit* target = SelectTarget(SelectTargetMethod::Random, 0, 100.0f, false))
                     {
                         me->CastSpell(target, SPELL_SHADOW_FISURE, false);
                     }
                     events.RepeatEvent(25000);
                     break;
                 case EVENT_FROST_BLAST:
-                    if (Unit* target = SelectTarget(SelectTargetMethod::Random, 1, 0, true))
+                    if (Unit* target = SelectTarget(SelectTargetMethod::Random, 1, 0, false))
                     {
                         me->CastSpell(target, SPELL_FROST_BLAST, false);
                     }
@@ -427,7 +427,7 @@ public:
                     {
                         if (Unit* target = SelectTarget(SelectTargetMethod::Random, 1, 200, true, true, -SPELL_CHAINS_OF_KELTHUZAD))
                         {
-                            me->CastSpell(target, SPELL_CHAINS_OF_KELTHUZAD, true);
+                           // me->CastSpell(target, SPELL_CHAINS_OF_KELTHUZAD, true);
                         }
                     }
                     Talk(SAY_CHAIN);

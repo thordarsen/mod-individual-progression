@@ -345,11 +345,11 @@ public:
                     return;
                 case EVENT_PRIMARY_SPELL:
                     Talk(SAY_TAUNT);
-                    me->CastSpell(me->GetVictim(), RAID_MODE(TABLE_SPELL_PRIMARY_10[horsemanId], TABLE_SPELL_PRIMARY_25[horsemanId]), false);
+                    me->CastSpell(me->GetVictim(), TABLE_SPELL_PRIMARY_10[horsemanId], false);
                     events.RepeatEvent(15000);
                     return;
                 case EVENT_PUNISH:
-                    if (!SelectTarget(SelectTargetMethod::MaxDistance, 0, 45.0f, true))
+                    if (!SelectTarget(SelectTargetMethod::MaxDistance, 0, 45.0f, false))
                     {
                         me->CastSpell(me, TABLE_SPELL_PUNISH[horsemanId], false);
                         Talk(EMOTE_RAGECAST);
@@ -357,16 +357,16 @@ public:
                     events.RepeatEvent(2010);
                     return;
                 case EVENT_SECONDARY_SPELL:
-                    me->CastSpell(me->GetVictim(), RAID_MODE(TABLE_SPELL_SECONDARY_10[horsemanId], TABLE_SPELL_SECONDARY_25[horsemanId]), false);
+                    me->CastSpell(me->GetVictim(), TABLE_SPELL_SECONDARY_10[horsemanId], false);
                     events.RepeatEvent(15000);
                     return;
             }
 
             if ((me->GetEntry() == NPC_LADY_BLAUMEUX_40 || me->GetEntry() == NPC_SIR_ZELIEK_40))
             {
-                if (Unit* target = SelectTarget(SelectTargetMethod::MaxDistance, 0, 45.0f, true))
+                if (Unit* target = SelectTarget(SelectTargetMethod::MaxDistance, 0, 45.0f, false))
                 {
-                    me->CastSpell(target, RAID_MODE(TABLE_SPELL_PRIMARY_10[horsemanId], TABLE_SPELL_PRIMARY_25[horsemanId]), false);
+                    me->CastSpell(target, TABLE_SPELL_PRIMARY_10[horsemanId], false);
                 }
             }
             else
@@ -400,19 +400,19 @@ public:
                         damage = 500;
                         break;
                     case 3:
-                        damage = 1500;
+                        damage = 1000;
                         break;
                     case 4:
-                        damage = 4000;
+                        damage = 1500;
                         break;
                     case 5:
-                        damage = 12000;
+                        damage = 2000;
                         break;
                     case 6:
-                        damage = 20000;
+                        damage = 2500;
                         break;
                     default:
-                        damage = 20000 + 1000 * (GetStackAmount() - 7);
+                        damage = 2500 + 100 * (GetStackAmount() - 7);
                         break;
                 }
                 if (damage)
