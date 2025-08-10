@@ -15,7 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "CreatureScript.h"
+#include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "naxxramas.h"
 
@@ -34,10 +34,8 @@ enum Says
 
 enum Spells
 {
-    SPELL_CURSE_OF_THE_PLAGUEBRINGER_10     = 29213,
-    SPELL_CURSE_OF_THE_PLAGUEBRINGER_25     = 54835,
-    SPELL_CRIPPLE_10                        = 29212,
-    SPELL_CRIPPLE_25                        = 54814,
+    SPELL_CURSE_OF_THE_PLAGUEBRINGER        = 29213,
+    SPELL_CRIPPLE                           = 29212,
     SPELL_SUMMON_PLAGUED_WARRIORS           = 29237,
     SPELL_TELEPORT                          = 29216,
     SPELL_TELEPORT_BACK                     = 29231,
@@ -60,9 +58,9 @@ enum Events
 
 enum Misc
 {
-    // NPC_PLAGUED_WARRIOR                     = 16984,
-    // NPC_PLAGUED_CHAMPION                    = 16983,
-    // NPC_PLAGUED_GUARDIAN                    = 16981
+    NPC_PLAGUED_WARRIOR                     = 351087,
+    NPC_PLAGUED_CHAMPION                    = 351086,
+    NPC_PLAGUED_GUARDIAN                    = 351085
 };
 
 const Position summoningPosition[5] =
@@ -89,8 +87,11 @@ public:
     struct boss_noth_40AI : public BossAI
     {
         explicit boss_noth_40AI(Creature* c) : BossAI(c, BOSS_NOTH), summons(me)
-        {}
+        {
+            pInstance = me->GetInstanceScript();
+        }
 
+        InstanceScript* pInstance;
         uint8 timesInBalcony;
         EventMap events;
         SummonList summons;
@@ -101,12 +102,12 @@ public:
             me->RemoveUnitFlag(UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_DISABLE_MOVE);
             me->SetControlled(false, UNIT_STATE_ROOT);
             events.Reset();
-            events.ScheduleEvent(EVENT_MOVE_TO_BALCONY, 110s);
-            events.ScheduleEvent(EVENT_CURSE, 15s);
-            events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE, 10s);
+            events.ScheduleEvent(EVENT_MOVE_TO_BALCONY, 110000);
+            events.ScheduleEvent(EVENT_CURSE, 15000);
+            events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE, 10000);
             if (Is25ManRaid())
             {
-                events.ScheduleEvent(EVENT_BLINK, 26s);
+                events.ScheduleEvent(EVENT_BLINK, 26000);
             }
         }
 
@@ -117,8 +118,8 @@ public:
             me->SetUnitFlag(UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_DISABLE_MOVE);
             me->SetControlled(true, UNIT_STATE_ROOT);
             events.Reset();
-            events.ScheduleEvent(EVENT_BALCONY_SUMMON_ANNOUNCE, 4s);
-            events.ScheduleEvent(EVENT_MOVE_TO_GROUND, 70s);
+            events.ScheduleEvent(EVENT_BALCONY_SUMMON_ANNOUNCE, 4000);
+            events.ScheduleEvent(EVENT_MOVE_TO_GROUND, 70000);
         }
 
         void SummonHelper(uint32 entry, uint32 count)
@@ -148,6 +149,13 @@ public:
             me->SetControlled(false, UNIT_STATE_ROOT);
             me->SetReactState(REACT_AGGRESSIVE);
             timesInBalcony = 0;
+            if (pInstance)
+            {
+                if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetGuidData(DATA_NOTH_ENTRY_GATE)))
+                {
+                    go->SetGoState(GO_STATE_ACTIVE);
+                }
+            }
         }
 
         void EnterEvadeMode(EvadeReason why) override
@@ -161,6 +169,13 @@ public:
             BossAI::JustEngagedWith(who);
             Talk(SAY_AGGRO);
             StartGroundPhase();
+            if (pInstance)
+            {
+                if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetGuidData(DATA_NOTH_ENTRY_GATE)))
+                {
+                    go->SetGoState(GO_STATE_READY);
+                }
+            }
         }
 
         void JustSummoned(Creature* summon) override
@@ -178,15 +193,25 @@ public:
             }
             BossAI::JustDied(killer);
             Talk(SAY_DEATH);
+            if (pInstance)
+            {
+                if (GameObject* go = me->GetMap()->GetGameObject(pInstance->GetGuidData(DATA_NOTH_ENTRY_GATE)))
+                {
+                    go->SetGoState(GO_STATE_ACTIVE);
+                }
+            }
         }
 
         void KilledUnit(Unit* who) override
         {
-            if (!who->IsPlayer())
+            if (who->GetTypeId() != TYPEID_PLAYER)
                 return;
 
             Talk(SAY_SLAY);
-            instance->StorePersistentData(PERSISTENT_DATA_IMMORTAL_FAIL, 1);
+            if (pInstance)
+            {
+                pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
+            }
         }
 
         void UpdateAI(uint32 diff) override
@@ -207,19 +232,19 @@ public:
                 case EVENT_CURSE:
                     if (events.GetPhaseMask() == 0)
                     {
-                        me->CastCustomSpell(SPELL_CURSE_OF_THE_PLAGUEBRINGER_10, SPELLVALUE_MAX_TARGETS, 10, me, false); // TODO: Increase to 20 on 40man
+                        me->CastCustomSpell(SPELL_CURSE_OF_THE_PLAGUEBRINGER, SPELLVALUE_MAX_TARGETS, 10, me, false);
                     }
-                    events.Repeat(25s); // 50-60 seconds in 40man
+                    events.RepeatEvent(25000);
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_ANNOUNCE:
                     Talk(SAY_SUMMON);
                     Talk(EMOTE_SUMMON);
-                    events.Repeat(30s);
-                    events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_REAL, 4s);
+                    events.RepeatEvent(30000);
+                    events.ScheduleEvent(EVENT_SUMMON_PLAGUED_WARRIOR_REAL, 4000);
                     break;
                 case EVENT_SUMMON_PLAGUED_WARRIOR_REAL:
                     me->CastSpell(me, SPELL_SUMMON_PLAGUED_WARRIORS, true);
-                    SummonHelper(NPC_PLAGUED_WARRIOR, RAID_MODE(2, 3, 3, 3));
+                    SummonHelper(NPC_PLAGUED_WARRIOR, 3);
                     break;
                 case EVENT_MOVE_TO_BALCONY:
                     Talk(EMOTE_TELEPORT_BALCONY);
@@ -228,30 +253,30 @@ public:
                     break;
                 case EVENT_BLINK:
                     DoResetThreatList();
-                    me->CastSpell(me, RAID_MODE(SPELL_CRIPPLE_10, SPELL_CRIPPLE_25, SPELL_CRIPPLE_10, SPELL_CRIPPLE_25), false);
+                    me->CastSpell(me, SPELL_CRIPPLE, false);
                     me->CastSpell(me, SPELL_BLINK, true);
                     Talk(EMOTE_BLINK);
-                    events.Repeat(30s);
+                    events.RepeatEvent(30000);
                     break;
                 // BALCONY
                 case EVENT_BALCONY_SUMMON_ANNOUNCE:
                     Talk(EMOTE_SUMMON_WAVE);
-                    events.Repeat(30s);
-                    events.ScheduleEvent(EVENT_BALCONY_SUMMON_REAL, 4s);
+                    events.RepeatEvent(30000);
+                    events.ScheduleEvent(EVENT_BALCONY_SUMMON_REAL, 4000);
                     break;
                 case EVENT_BALCONY_SUMMON_REAL:
                     me->CastSpell(me, SPELL_SUMMON_PLAGUED_WARRIORS, true); // visual
                     switch (timesInBalcony)
                     {
                          case 0:
-                             SummonHelper(NPC_PLAGUED_CHAMPION, RAID_MODE(2, 4, 4, 4));
+                             SummonHelper(NPC_PLAGUED_CHAMPION, 4);
                              break;
                          case 1:
-                             SummonHelper(NPC_PLAGUED_CHAMPION, RAID_MODE(1, 2, 2, 2));
-                             SummonHelper(NPC_PLAGUED_GUARDIAN, RAID_MODE(1, 2, 2, 2));
+                             SummonHelper(NPC_PLAGUED_CHAMPION, 2);
+                             SummonHelper(NPC_PLAGUED_GUARDIAN, 2);
                              break;
                          default:
-                             SummonHelper(NPC_PLAGUED_GUARDIAN, RAID_MODE(2, 4, 4, 4));
+                             SummonHelper(NPC_PLAGUED_GUARDIAN, 4);
                              break;
                     }
                     break;

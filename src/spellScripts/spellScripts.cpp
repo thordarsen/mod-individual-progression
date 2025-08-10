@@ -32,22 +32,22 @@ class spell_detect_magic : public SpellScript
             else
             {
                 if (holyResist > 0.01)
-                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a holy resistance of: {}", holyResist);
+                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a holy resistance of: %.0f", holyResist);
 
                 if (fireResist > 0.01)
-                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a fire resistance of: {}", fireResist);
+                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a fire resistance of: %.0f", fireResist);
 
                 if (natureResist > 0.01)
-                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a nature resistance of: {}", natureResist);
+                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a nature resistance of: %.0f", natureResist);
 
                 if (frostResist > 0.01)
-                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a frost resistance of: {}", frostResist);
+                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a frost resistance of: %.0f", frostResist);
 
                 if (shadowResist > 0.01)
-                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a shadow resistance of: {}", shadowResist);
+                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a shadow resistance of: %.0f", shadowResist);
 
                 if (arcaneResist > 0.01)
-                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a arcane resistance of: {}", arcaneResist);
+                    ChatHandler(caster->GetSession()).PSendSysMessage("You detect a arcane resistance of: %.0f", arcaneResist);
             }
         }
     }

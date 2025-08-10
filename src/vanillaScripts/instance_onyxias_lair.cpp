@@ -15,7 +15,6 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "IndividualProgression.h"
 #include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "SpellInfo.h"
@@ -24,8 +23,7 @@
 ObjectData const creatureData[] =
         {
                 { NPC_ONYXIA, DATA_ONYXIA },
-                { NPC_ONYXIA_40, DATA_ONYXIA },
-                { 0, 0 } // END
+                { NPC_ONYXIA_40, DATA_ONYXIA }
         };
 
 class instance_onyxias_lair_40 : public InstanceMapScript
@@ -61,7 +59,7 @@ public:
                 case GO_WHELP_SPAWNER:
                     if (instance->GetDifficulty() == RAID_DIFFICULTY_10MAN_HEROIC)
                     {
-                        go->CastSpell((Unit*)nullptr, 91003);
+                        go->CastSpell((Unit*)nullptr, 90003);
                     }
                     else
                     {
@@ -136,9 +134,12 @@ public:
 
     bool OnTrigger(Player* player, AreaTrigger const* /*areaTrigger*/) override
     {
-        if (player->GetLevel() < IP_LEVEL_WOTLK)
+        if (player->getLevel() < 80)
         {
             player->SetRaidDifficulty(RAID_DIFFICULTY_10MAN_HEROIC);
+        }
+        if (!sMapMgr->PlayerCannotEnter(249, player, true))
+        {
             player->TeleportTo(249, 29.1607f, -71.3372f, -8.18032f, 4.58f);
         }
         return true;
@@ -277,7 +278,7 @@ public:
                 spellInfo->Effects[EFFECT_0].DieSides = 225;
                 spellInfo->Effects[EFFECT_0].BasePoints = 1387;
                 break;
-            case 91003:
+            case 90003:
                 spellInfo->Targets |= TARGET_FLAG_DEST_LOCATION;
                 spellInfo->Effects[EFFECT_0].TargetA = SpellImplicitTargetInfo(TARGET_DEST_DEST);
                 spellInfo->RangeEntry = sSpellRangeStore.LookupEntry(13); // 50000yd

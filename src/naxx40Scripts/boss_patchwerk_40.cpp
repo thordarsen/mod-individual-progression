@@ -15,7 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "CreatureScript.h"
+#include "ScriptMgr.h"
 #include "ScriptedCreature.h"
 #include "naxxramas.h"
 
@@ -30,8 +30,7 @@ enum Yells
 
 enum Spells
 {
-    SPELL_HATEFUL_STRIKE_10         = 41926,
-    SPELL_HATEFUL_STRIKE_25         = 59192,
+    SPELL_HATEFUL_STRIKE            = 28308,
     SPELL_FRENZY                    = 28131,
     SPELL_BERSERK                   = 26662,
     SPELL_SLIME_BOLT                = 32309
@@ -43,11 +42,6 @@ enum Events
     EVENT_HATEFUL_STRIKE            = 2,
     EVENT_SLIME_BOLT                = 3,
     EVENT_BERSERK                   = 4
-};
-
-enum Misc
-{
-    ACHIEV_TIMED_START_EVENT        = 10286
 };
 
 class boss_patchwerk_40 : public CreatureScript
@@ -63,9 +57,12 @@ public:
     struct boss_patchwerk_40AI : public BossAI
     {
         explicit boss_patchwerk_40AI(Creature* c) : BossAI(c, BOSS_PATCHWERK)
-        {}
+        {
+            pInstance = me->GetInstanceScript();
+        }
 
         EventMap events;
+        InstanceScript* pInstance;
 
         void Reset() override
         {
@@ -75,13 +72,17 @@ public:
 
         void KilledUnit(Unit* who) override
         {
-            if (!who->IsPlayer())
+            if (who->GetTypeId() != TYPEID_PLAYER)
                 return;
 
             if (!urand(0, 3))
+            {
                 Talk(SAY_SLAY);
-
-            instance->StorePersistentData(PERSISTENT_DATA_IMMORTAL_FAIL, 1);
+            }
+            if (pInstance)
+            {
+                pInstance->SetData(DATA_IMMORTAL_FAIL, 0);
+            }
         }
 
         void JustDied(Unit*  killer) override
@@ -95,10 +96,9 @@ public:
             BossAI::JustEngagedWith(who);
             Talk(SAY_AGGRO);
             me->SetInCombatWithZone();
-            events.ScheduleEvent(EVENT_HATEFUL_STRIKE, 1200ms);
-            events.ScheduleEvent(EVENT_BERSERK, 7min); // 7 minutes enrange
-            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1s);
-            // instance->DoStartTimedAchievement(ACHIEVEMENT_TIMED_TYPE_EVENT, ACHIEV_TIMED_START_EVENT);
+            events.ScheduleEvent(EVENT_HATEFUL_STRIKE, 1200);
+            events.ScheduleEvent(EVENT_BERSERK, 7 * 60 * 1000); // 7 minutes enrange
+            events.ScheduleEvent(EVENT_HEALTH_CHECK, 1000);
         }
 
         void UpdateAI(uint32 diff) override
@@ -113,7 +113,7 @@ public:
             switch (events.ExecuteEvent())
             {
                 case EVENT_HATEFUL_STRIKE:
-                   {
+                    {
                         // Cast Hateful strike on the player with the highest amount of HP within melee distance, and second threat amount
                         std::list<Unit*> meleeRangeTargets;
                         Unit* finalTarget = nullptr;
@@ -155,20 +155,19 @@ public:
                         }
                         if (finalTarget)
                         {
-                            int32 dmg = urand(22100,22850);
-                            me->CastCustomSpell(finalTarget, SPELL_HATEFUL_STRIKE_10, &dmg, 0, 0, false);
+                            me->CastSpell(finalTarget, SPELL_HATEFUL_STRIKE, false);
                         }
-                        events.Repeat(1200ms);
+                        events.RepeatEvent(1200);
                         break;
                     }
                 case EVENT_BERSERK:
                     Talk(EMOTE_BERSERK);
                     me->CastSpell(me, SPELL_BERSERK, true);
-                    events.ScheduleEvent(EVENT_SLIME_BOLT, 3s);
+                    events.ScheduleEvent(EVENT_SLIME_BOLT, 3000);
                     break;
                 case EVENT_SLIME_BOLT:
                     me->CastSpell(me, SPELL_SLIME_BOLT, false);
-                    events.Repeat(3s);
+                    events.RepeatEvent(3000);
                     break;
                 case EVENT_HEALTH_CHECK:
                     if (me->GetHealthPct() <= 5)
@@ -177,7 +176,7 @@ public:
                         me->CastSpell(me, SPELL_FRENZY, true);
                         break;
                     }
-                    events.Repeat(1s);
+                    events.RepeatEvent(1000);
                     break;
             }
             DoMeleeAttackIfReady();
