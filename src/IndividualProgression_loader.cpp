@@ -13,7 +13,7 @@ void AddSC_quest_the_masquerade_60_2();
 void AddSC_boss_lord_kazzak_60_2();
 void AddSC_boss_chromaggus_60_2_A();
 void AddSC_boss_drakkisath_50_59_B();
-void AddSC_instance_naxxramas_combined();
+void AddSC_instance_naxxramas();
 void AddSC_boss_anubrekhan_40();
 void AddSC_boss_faerlina_40();
 void AddSC_boss_four_horsemen_40();
@@ -29,7 +29,11 @@ void AddSC_boss_patchwerk_40();
 void AddSC_boss_razuvious_40();
 void AddSC_boss_sapphiron_40();
 void AddSC_boss_thaddius_40();
-void AddSC_npc_omarion();
+void AddSC_npc_omarion_40();
+void AddSC_custom_spells_40();
+void AddSC_custom_creatures_40();
+void AddSC_custom_gameobjects_40();
+void AddSC_custom_scripts_40();
 void AddSC_Ipp_Wotlk_Modded_Scripts();
 void AddSC_aq_scripts();
 void AddSC_cot_scripts();
@@ -40,7 +44,8 @@ void AddSC_mod_individual_progression_awareness();
 void AddSC_mod_individual_progression_player();
 void AddSC_npc_archmage_timear();
 void AddSC_karazhan_70();
-
+void AddSC_the_eye_70();
+void AddSC_serpentshrine_cavern_70();
 
 void Addmod_individual_progressionScripts()
 {
@@ -54,7 +59,7 @@ void Addmod_individual_progressionScripts()
     AddSC_boss_lord_kazzak_60_2();
     AddSC_boss_chromaggus_60_2_A();
     AddSC_boss_drakkisath_50_59_B();
-    AddSC_instance_naxxramas_combined();
+    AddSC_instance_naxxramas();
     AddSC_boss_anubrekhan_40();
     AddSC_boss_faerlina_40();
     AddSC_boss_four_horsemen_40();
@@ -70,7 +75,11 @@ void Addmod_individual_progressionScripts()
     AddSC_boss_razuvious_40();
     AddSC_boss_sapphiron_40();
     AddSC_boss_thaddius_40();
-    AddSC_npc_omarion();
+    AddSC_npc_omarion_40();
+    AddSC_custom_spells_40();
+    AddSC_custom_creatures_40();
+    AddSC_custom_gameobjects_40();
+    AddSC_custom_scripts_40();
     AddSC_Ipp_Wotlk_Modded_Scripts();
     AddSC_aq_scripts();
     AddSC_cot_scripts();
@@ -81,4 +90,6 @@ void Addmod_individual_progressionScripts()
     AddSC_mod_individual_progression_player();
     AddSC_npc_archmage_timear();
     AddSC_karazhan_70();
+    AddSC_the_eye_70();
+    AddSC_serpentshrine_cavern_70();
 }

@@ -4,12 +4,23 @@ DELETE FROM `npc_trainer` WHERE `SpellID` = 1066;
 /* Restore Aquatic Form as a reward for Aquatic Form quests */
 UPDATE `quest_template` SET `RewardSpell` = 1446 WHERE `ID` IN (31, 5061);
 
-/* Correct Vanilla level for Druid Travel Form */
+/* Remove Conjure Water (Rank 7) from Mage Trainers - it is a quest reward instead */
+DELETE FROM `npc_trainer` WHERE `SpellID` = 10140;
+
+/* Restore Ghost Wolf level requirement to 20 */
+UPDATE `npc_trainer` SET `ReqLevel` = 20 WHERE `SpellID` = 2645;
+
+/* Restore Aspect of the Cheetah level requirement to 20 */
+UPDATE `npc_trainer` SET `ReqLevel` = 20 WHERE `SpellID` = 5118;
+
+/* Restore Travel Form level requirement to 30 */
 UPDATE `npc_trainer` SET `ReqLevel` = 30 WHERE `SpellID` = 783;
 
 /* Remove Summon Imp from Trainer - it is a quest reward instead */
-
 DELETE FROM `npc_trainer` WHERE `ID`=200009 AND `SpellID`=688;
+
+/* Remove Summon Felsteed from Trainer - it is a quest reward instead */
+DELETE FROM `npc_trainer` WHERE `ID`=200010 AND `SpellID`=1710;
 
 /* Remove Sense Undead from Trainer - it is a quest reward for Tome of Valor quest line */
 DELETE FROM `npc_trainer` WHERE `SpellID`=5502;
@@ -20,156 +31,20 @@ INSERT INTO `playercreateinfo_skills` (`raceMask`, `classMask`, `skill`, `rank`,
 DELETE FROM `npc_trainer` WHERE `ID` = 200015 AND `SpellID` = 674;
 INSERT INTO `npc_trainer` (`ID`, `SpellID`, `MoneyCost`, `ReqSkillLine`, `ReqSkillRank`, `ReqLevel`) VALUES (200015, 674, 300, 0, 0, 10);
 
+-- fix Mai'ah <Mage Trainer> in Valley of Trials.
+DELETE FROM `npc_trainer` WHERE `ID` = 5884 AND `SpellID` = -200008;
 
 -- Class skills taught by dropped items that should not be taught by trainers
 DELETE FROM npc_trainer
-WHERE SpellID IN (23028,
-                  21849,
-                  21850,
-                  31018,
-                  31709,
-                  27090,
-                  27127,
-                  28609,
-                  28612,
-                  21564,
-                  25392,
-                  27683,
-                  39374,
-                  29228,
-                  26991,
-                  33717,
-                  25304,
-                  25306,
-                  25345,
-                  25307,
-                  25309,
-                  25311,
-                  28610,
-                  25314,
-                  25315,
-                  25316,
-                  25290,
-                  25291,
-                  25292,
-                  25357,
-                  25361,
-                  25297,
-                  25298,
-                  25299,
-                  25286,
-                  25289,
-                  25288,
-                  25300,
-                  21302,
-                  25302,
-                  25294,
-                  25295,
-                  25296,
-                  31016,
-                  21562,
-                  19801);
+WHERE SpellID IN (19801, 21302, 21562, 21564, 21849, 21850, 23028, 
+    25286, 25288, 25289, 25290, 25291, 25292, 25294, 25295, 25296, 25297, 25298, 25299, 
+    25300, 25302, 25304, 25306, 25307, 25309, 25311, 25314, 25315, 25316, 25345, 25357, 25361, 25392, 
+    26991, 27090, 27127, 27683, 28609, 28610, 28612, 29228, 31016, 31018, 31709, 33717, 39374);
 
 /* Restore Tome of Tranquilizing Shot to Lucifron */
 DELETE FROM `creature_loot_template` WHERE `Entry`=12118 AND `Item`=16665 AND `Reference`=0 AND `GroupId`=0;
 INSERT INTO `creature_loot_template` (`Entry`, `Item`, `Reference`, `Chance`, `QuestRequired`, `LootMode`, `GroupId`, `MinCount`, `MaxCount`, `Comment`) VALUES
 (12118, 16665, 0, 100, 0, 1, 0, 1, 1, NULL);
-
-/* Restore AQ20 Book Drops */
-DELETE FROM `reference_loot_template` WHERE `entry` IN (30420, 30421, 30424, 30426, 30427);
-INSERT INTO `reference_loot_template` (`Entry`, `Item`, `Chance`, `GroupId`, `MinCount`, `MaxCount`) VALUES
-(30420, 21282, 0, 1, 1, 1),
-(30420, 21279, 0, 1, 1, 1),
-(30420, 21283, 0, 1, 1, 1),
-(30420, 21281, 0, 1, 1, 1),
-(30420, 21291, 0, 1, 1, 1),
-(30420, 21288, 0, 1, 1, 1),
-(30420, 21214, 0, 1, 1, 1),
-(30420, 21280, 0, 1, 1, 1),
-(30420, 21297, 0, 1, 1, 1),
-(30421, 21292, 0, 1, 1, 1),
-(30424, 21300, 0, 1, 1, 1),
-(30424, 21302, 0, 1, 1, 1),
-(30424, 21299, 0, 1, 1, 1),
-(30424, 21307, 0, 1, 1, 1),
-(30421, 21298, 0, 1, 1, 1),
-(30424, 21290, 0, 1, 1, 1),
-(30424, 21304, 0, 1, 1, 1),
-(30424, 21306, 0, 1, 1, 1),
-(30421, 21296, 0, 1, 1, 1),
-(30421, 21295, 0, 1, 1, 1),
-(30424, 21303, 0, 1, 1, 1),
-(30421, 21294, 0, 1, 1, 1),
-(30421, 21285, 0, 1, 1, 1),
-(30421, 21284, 0, 1, 1, 1),
-(30421, 21287, 0, 1, 1, 1),
-(30421, 21289, 0, 1, 1, 1),
-(30426, 21302, 0, 2, 1, 1),
-(30426, 21299, 0, 2, 1, 1),
-(30426, 21214, 0, 2, 1, 1),
-(30426, 21300, 0, 2, 1, 1),
-(30426, 21283, 0, 2, 1, 1),
-(30426, 21279, 0, 2, 1, 1),
-(30426, 21296, 0, 2, 1, 1),
-(30426, 21282, 0, 2, 1, 1),
-(30426, 21280, 0, 2, 1, 1),
-(30426, 21298, 0, 2, 1, 1),
-(30426, 21297, 0, 2, 1, 1),
-(30426, 21303, 0, 2, 1, 1),
-(30426, 21295, 0, 2, 1, 1),
-(30426, 21284, 0, 2, 1, 1),
-(30426, 21290, 0, 2, 1, 1),
-(30426, 21289, 0, 2, 1, 1),
-(30426, 21291, 0, 2, 1, 1),
-(30426, 21307, 0, 2, 1, 1),
-(30426, 21292, 0, 2, 1, 1),
-(30426, 21288, 0, 2, 1, 1),
-(30426, 21287, 0, 2, 1, 1),
-(30426, 21306, 0, 2, 1, 1),
-(30426, 21285, 0, 2, 1, 1),
-(30426, 21294, 0, 2, 1, 1),
-(30426, 21304, 0, 2, 1, 1),
-(30426, 21281, 0, 2, 1, 1),
-(30427, 21307, 0, 4, 1, 1),
-(30427, 21291, 0, 4, 1, 1),
-(30427, 21300, 0, 4, 1, 1),
-(30427, 21302, 0, 4, 1, 1),
-(30427, 21290, 0, 4, 1, 1),
-(30427, 21306, 0, 4, 1, 1),
-(30427, 21292, 0, 4, 1, 1),
-(30427, 21304, 0, 4, 1, 1),
-(30427, 21294, 0, 4, 1, 1),
-(30427, 21303, 0, 4, 1, 1),
-(30427, 21299, 0, 4, 1, 1),
-(30427, 21295, 0, 4, 1, 1),
-(30427, 21298, 0, 4, 1, 1),
-(30427, 21296, 0, 4, 1, 1),
-(30427, 21297, 0, 4, 1, 1),
-(30427, 21279, 0, 4, 1, 1),
-(30427, 21283, 0, 4, 1, 1),
-(30427, 21285, 0, 4, 1, 1),
-(30427, 21282, 0, 4, 1, 1),
-(30427, 21287, 0, 4, 1, 1),
-(30427, 21281, 0, 4, 1, 1),
-(30427, 21214, 0, 4, 1, 1),
-(30427, 21288, 0, 4, 1, 1),
-(30427, 21280, 0, 4, 1, 1),
-(30427, 21289, 0, 4, 1, 1),
-(30427, 21284, 0, 4, 1, 1);
-
-REPLACE INTO `creature_loot_template` (`Entry`, `Item`, `Reference`, `Chance`, `GroupId`, `MinCount`, `MaxCount`) VALUES
-(15339, 30424, 30424, 100, 0, 1, 1),
-(15339, 30421, 30421, 100, 0, 1, 1),
-(15339, 30420, 30420, 100, 0, 1, 1),
-(15340, 30426, 30426, 100, 4, 1, 1),
-(15340, 30427, 30427, 100, 4, 1, 1),
-(15341, 30427, 30427, 100, 4, 1, 1),
-(15341, 30426, 30426, 100, 4, 1, 1),
-(15348, 30426, 30426, 100, 4, 1, 1),
-(15369, 30427, 30427, 100, 4, 1, 1),
-(15369, 30426, 30426, 100, 4, 1, 1),
-(15370, 30427, 30427, 100, 4, 1, 1),
-(15370, 30426, 30426, 100, 4, 1, 1);
 
 /* Restore drops from Grimoire of Shadow Ward IV */
 DELETE FROM `creature_loot_template` WHERE `Item` = 22891;

@@ -1065,6 +1065,11 @@ DELETE FROM `npc_vendor` WHERE `entry` = 2846 AND `item` = 38426;
 DELETE FROM `npc_vendor` WHERE `entry` = 2848 AND `item` = 40411;
 
 
+/* NPC Glyx Brewright - 2849 */
+/* Remove non-Vanilla item Noble's Elementium Signet */
+DELETE FROM `npc_vendor` WHERE `entry` = 2849 AND `item` = 37934;
+
+
 /* NPC Grawl - 2908 */
 /* Remove non-Vanilla item Wicked Arrow */
 DELETE FROM `npc_vendor` WHERE `entry` = 2908 AND `item` = 28053;
@@ -1728,7 +1733,20 @@ INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`) VALUES (3551,
 /* Add Missing Vanilla item Crystal Vial */
 DELETE FROM `npc_vendor` WHERE `entry` = 3551 AND `item` = 8925;
 INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`) VALUES (3551, 8925, 0, 0);
-
+/* Remove non-Vanilla item Instant Poison VIII */
+DELETE FROM `npc_vendor` WHERE `entry` = 3551 AND `item` = 43230;
+/* Remove non-Vanilla item Instant Poison IX */
+DELETE FROM `npc_vendor` WHERE `entry` = 3551 AND `item` = 43231;
+/* Remove non-Vanilla item Deadly Poison VIII */
+DELETE FROM `npc_vendor` WHERE `entry` = 3551 AND `item` = 43232;
+/* Remove non-Vanilla item Deadly Poison IX */
+DELETE FROM `npc_vendor` WHERE `entry` = 3551 AND `item` = 43233;
+/* Remove non-Vanilla item Wound Poison VI */
+DELETE FROM `npc_vendor` WHERE `entry` = 3551 AND `item` = 43234;
+/* Remove non-Vanilla item Wound Poison VII */
+DELETE FROM `npc_vendor` WHERE `entry` = 3551 AND `item` = 43235;
+/* Remove non-Vanilla item Anesthetic Poison II */
+DELETE FROM `npc_vendor` WHERE `entry` = 3551 AND `item` = 43237;
 
 /* NPC Andrew Hilbert - 3556 */
 /* Add Missing Vanilla item Hot Spices */
@@ -2351,7 +2369,22 @@ INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`) VALUES (4585,
 /* Add Missing Vanilla item Crystal Vial */
 DELETE FROM `npc_vendor` WHERE `entry` = 4585 AND `item` = 8925;
 INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`) VALUES (4585, 8925, 0, 0);
+/* Remove non-Vanilla item Instant Poison VIII */
+DELETE FROM `npc_vendor` WHERE `entry` = 4585 AND `item` = 43230;
+/* Remove non-Vanilla item Instant Poison IX */
+DELETE FROM `npc_vendor` WHERE `entry` = 4585 AND `item` = 43231;
+/* Remove non-Vanilla item Deadly Poison VIII */
+DELETE FROM `npc_vendor` WHERE `entry` = 4585 AND `item` = 43232;
+/* Remove non-Vanilla item Deadly Poison IX */
+DELETE FROM `npc_vendor` WHERE `entry` = 4585 AND `item` = 43233;
+/* Remove non-Vanilla item Wound Poison VI */
+DELETE FROM `npc_vendor` WHERE `entry` = 4585 AND `item` = 43234;
+/* Remove non-Vanilla item Wound Poison VII */
+DELETE FROM `npc_vendor` WHERE `entry` = 4585 AND `item` = 43235;
+/* Remove non-Vanilla item Anesthetic Poison II */
+DELETE FROM `npc_vendor` WHERE `entry` = 4585 AND `item` = 43237;
 
+    
 
 /* NPC Elizabeth Van Talen - 4587 */
 /* Remove non-Vanilla item Hair Trigger */
@@ -3501,9 +3534,6 @@ DELETE FROM `npc_vendor` WHERE `entry` = 11186 AND `item` = 20824;
 /* NPC Evie Whirlbrew - 11188 */
 /* Remove non-Vanilla item Enchanted Vial */
 DELETE FROM `npc_vendor` WHERE `entry` = 11188 AND `item` = 40411;
-/* Add Missing Vanilla item Pattern: Mooncloth */
-DELETE FROM `npc_vendor` WHERE `entry` = 11188 AND `item` = 14526;
-INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`) VALUES (11188, 14526, 0, 0);
 /* Add Missing Vanilla item Recipe: Major Healing Potion */
 DELETE FROM `npc_vendor` WHERE `entry` = 11188 AND `item` = 13480;
 INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`) VALUES (11188, 13480, 1, 7200);
@@ -4044,10 +4074,24 @@ DELETE FROM `npc_vendor` WHERE `entry` = 14739 AND `item` = 22148;
 DELETE FROM `npc_vendor` WHERE `entry` = 14739 AND `item` = 17019;
 INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`) VALUES (14739, 17019, 0, 0);
 
-
-/* NPC Kelm Hargunth - 14754 */
-/* Remove non-Vanilla item Outrider's Lamellar Legguards */
+/* Remove non-Vanilla item Sentinel's Mail Leggings and Outrider's Lamellar Legguards */
+DELETE FROM `npc_vendor` WHERE `entry` = 14753 AND `item` = 30497;
 DELETE FROM `npc_vendor` WHERE `entry` = 14754 AND `item` = 30498;
+
+/* Kelm Hargunth refuses to show his vendor inventory - issue solved, there is a reputation requirement - reverting the clone fix */
+SET @Kelm := 114754;
+
+DELETE FROM `creature_template` WHERE `entry` = @Kelm;
+DELETE FROM `creature_template_locale` WHERE `entry` = @Kelm;
+DELETE FROM `creature_template_model` WHERE `CreatureID` = @Kelm;
+DELETE FROM `creature` WHERE `id1` = @Kelm;
+DELETE FROM `creature_equip_template` WHERE `CreatureID` = @Kelm;
+DELETE FROM `npc_vendor` WHERE `entry` = @Kelm;
+
+UPDATE `creature` SET `spawnMask` = 1 WHERE `id1` = 14754;
+
+UPDATE `creature_queststarter` SET `id` = 14754 WHERE `quest` IN (7866, 7867, 7868);
+UPDATE `creature_questender` SET `id` = 14754 WHERE `quest` IN (7866, 7867, 7868);
 
 
 /* NPC Lhara - 14846 */
@@ -4275,6 +4319,13 @@ DELETE FROM `npc_vendor` WHERE `entry` = 16015 AND `item` = 22148;
 /* NPC Renn'az - 17598 */
 /* Remove non-Vanilla item Wicked Arrow */
 DELETE FROM `npc_vendor` WHERE `entry` = 17598 AND `item` = 28053;
+
+
+/* NPC Engineer Torquespindle - 25082 */
+/* Remove non-Vanilla item Flintweed Seed */
+DELETE FROM `npc_vendor` WHERE `entry` = 25082 AND `item` = 22147;
+/* Remove non-Vanilla item Wild Quillvine */
+DELETE FROM `npc_vendor` WHERE `entry` = 25082 AND `item` = 22148;
 
 
 /* NPC Kurdrum Barleybeard - 5139 */
@@ -4712,7 +4763,12 @@ DELETE FROM `npc_vendor` WHERE `entry` IN (17246, 16253, 16262, 16261, 16677, 17
 DELETE FROM `npc_vendor` WHERE `item` IN (28060, 28053);
 
 /* PvP Gear Vendor Rep Requirements */
+-- these need to be hidden. they cannot get a reputation requirement 
+-- because some of these items have the same ID for both alliance and horde.
+-- you can only set 1 reputation requirement for an item.
+-- AB is an exception. all AB items are unique to either faction
 REPLACE INTO conditions (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `ConditionTypeOrReference`, `ConditionValue1`, `ConditionValue2`, `comment`) VALUES
+-- Jekyll Flandring <Frostwolf Supply Officer>
 (23, 13219, 17349, 5, 729, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 13219, 17352, 5, 729, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 13219, 19031, 5, 729, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
@@ -4749,6 +4805,7 @@ REPLACE INTO conditions (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`
 (23, 13219, 19325, 5, 729, 128, 'Vanilla PvP Gear Conditions'),
 (23, 13219, 21563, 5, 729, 128, 'Vanilla PvP Gear Conditions'),
 (23, 13219, 19324, 5, 729, 128, 'Vanilla PvP Gear Conditions'),
+-- Grunnda Wolfheart <Frostwolf Supply Officer>
 (23, 13218, 17349, 5, 729, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 13218, 17352, 5, 729, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 13218, 19031, 5, 729, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
@@ -4785,6 +4842,7 @@ REPLACE INTO conditions (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`
 (23, 13218, 19325, 5, 729, 128, 'Vanilla PvP Gear Conditions'),
 (23, 13218, 21563, 5, 729, 128, 'Vanilla PvP Gear Conditions'),
 (23, 13218, 19324, 5, 729, 128, 'Vanilla PvP Gear Conditions'),
+-- Thanthaldis Snowgleam <Stormpike Supply Officer>
 (23, 13217, 17349, 5, 730, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 13217, 17352, 5, 730, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 13217, 19032, 5, 730, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
@@ -4821,6 +4879,7 @@ REPLACE INTO conditions (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`
 (23, 13217, 19325, 5, 730, 128, 'Vanilla PvP Gear Conditions'),
 (23, 13217, 21563, 5, 730, 128, 'Vanilla PvP Gear Conditions'),
 (23, 13217, 19324, 5, 730, 128, 'Vanilla PvP Gear Conditions'),
+-- Gaelden Hammersmith <Stormpike Supply Officer>
 (23, 13216, 17349, 5, 730, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 13216, 17352, 5, 730, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 13216, 19032, 5, 730, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
@@ -4857,6 +4916,7 @@ REPLACE INTO conditions (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`
 (23, 13216, 19325, 5, 730, 128, 'Vanilla PvP Gear Conditions'),
 (23, 13216, 21563, 5, 730, 128, 'Vanilla PvP Gear Conditions'),
 (23, 13216, 19324, 5, 730, 128, 'Vanilla PvP Gear Conditions'),
+-- Illiyana Moonblaze <Silverwing Supply Officer>
 (23, 14753, 21565, 5, 890, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 14753, 21566, 5, 890, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 14753, 21567, 5, 890, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
@@ -4930,7 +4990,7 @@ REPLACE INTO conditions (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`
 (23, 14753, 22748, 5, 890, 128, 'Vanilla PvP Gear Conditions'),
 (23, 14753, 22672, 5, 890, 128, 'Vanilla PvP Gear Conditions'),
 (23, 14753, 22753, 5, 890, 128, 'Vanilla PvP Gear Conditions'),
-(23, 14753, 30497, 5, 890, 128, 'Vanilla PvP Gear Conditions'),
+-- Kelm Hargunth <Warsong Supply Officer>
 (23, 14754, 21565, 5, 889, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 14754, 21566, 5, 889, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
 (23, 14754, 21567, 5, 889, 16 + 32 + 64 + 128, 'Vanilla PvP Gear Conditions'),
@@ -5004,3 +5064,37 @@ REPLACE INTO conditions (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`
 (23, 14754, 22673, 5, 889, 128, 'Vanilla PvP Gear Conditions'),
 (23, 14754, 22676, 5, 889, 128, 'Vanilla PvP Gear Conditions'),
 (23, 14754, 22651, 5, 889, 128, 'Vanilla PvP Gear Conditions');
+
+/* Add PvP Level 60 gear sets for Horde Paladins and Alliance Shamans - thanks StraysFromPath! */
+DELETE FROM npc_vendor WHERE `entry` = 12792 AND `item` IN (29612, 29613, 29614, 29615, 29616, 29617,
+                                                           29600, 29601, 29602, 29603, 29604, 29605);
+INSERT INTO npc_vendor (entry, slot, item, maxcount, incrtime, ExtendedCost, VerifiedBuild) VALUES
+    (12792, 0, 29612, 0, 0, 465, 0),
+    (12792, 0, 29613, 0, 0, 465, 0),
+    (12792, 0, 29614, 0, 0, 465, 0),
+    (12792, 0, 29615, 0, 0, 463, 0),
+    (12792, 0, 29616, 0, 0, 463, 0),
+    (12792, 0, 29617, 0, 0, 463, 0),
+    (12792, 0, 29600, 0, 0, 428, 0),
+    (12792, 0, 29601, 0, 0, 428, 0),
+    (12792, 0, 29602, 0, 0, 652, 0),
+    (12792, 0, 29603, 0, 0, 652, 0),
+    (12792, 0, 29604, 0, 0, 444, 0),
+    (12792, 0, 29605, 0, 0, 444, 0);
+
+DELETE FROM npc_vendor WHERE `entry` = 12777 AND `item` IN (29608, 29606, 29611, 29609, 29607,
+                                                           29610, 29595, 29599, 29597, 29596,
+                                                           29598, 29594);
+INSERT INTO npc_vendor (entry, slot, item, maxcount, incrtime, ExtendedCost, VerifiedBuild) VALUES
+    (12777, 0, 29608, 0, 0, 465, 0),
+    (12777, 0, 29606, 0, 0, 465, 0),
+    (12777, 0, 29611, 0, 0, 465, 0),
+    (12777, 0, 29609, 0, 0, 463, 0),
+    (12777, 0, 29607, 0, 0, 463, 0),
+    (12777, 0, 29610, 0, 0, 463, 0),
+    (12777, 0, 29595, 0, 0, 428, 0),
+    (12777, 0, 29599, 0, 0, 428, 0),
+    (12777, 0, 29597, 0, 0, 652, 0),
+    (12777, 0, 29596, 0, 0, 652, 0),
+    (12777, 0, 29598, 0, 0, 444, 0),
+    (12777, 0, 29594, 0, 0, 444, 0);
